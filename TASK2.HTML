@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <style>
+        .post-body {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #0f30c7;
+            border: 1px solid #d40d0d;
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Post Titles</h1>
+
+    <ul id="postsList">
+        <!-- Posts will be populated here dynamically -->
+    </ul>
+
+    <script>
+        // Fetch data from the API
+        fetch('https://jsonplaceholder.typicode.com/posts')
+            .then(response => response.json())  // Parse the JSON response
+            .then(posts => {
+                const postsList = document.getElementById('postsList');
+
+                posts.forEach(post => {
+                    // Extract the necessary details from each post
+                    const postId = post.id;
+                    const postTitle = post.title;
+                    const postBody = post.body;
+
+                    // Create a list item for each post
+                    const listItem = document.createElement('li');
+                    listItem.textContent = postTitle;
+
+                    // Create a div to hold the body, initially hidden
+                    const bodyDiv = document.createElement('div');
+                    bodyDiv.classList.add('post-body');
+                    bodyDiv.textContent = postBody;
+
+                    // Toggle the visibility of the body when the title is clicked
+                    listItem.addEventListener('click', () => {
+                        bodyDiv.style.display = (bodyDiv.style.display === 'none' || bodyDiv.style.display === '') ? 'block' : 'none';
+                    });
+
+                    // Append the body and title to the list item
+                    listItem.appendChild(bodyDiv);
+                    postsList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+
+</body>
+</html>
