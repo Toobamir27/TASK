@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .profile-card {
+            width: 200px;
+            border: 1px solid #ca109c;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(199, 8, 206, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .profile-card:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-card img {
+            width: 100%;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .profile-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>User Profiles</h1>
+
+    <div id="profiles-container">
+        <!-- User profile cards will be dynamically added here -->
+    </div>
+
+    <script>
+        // Fetch data from the random user API
+        fetch('https://randomuser.me/api/?results=5')
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                const profilesContainer = document.getElementById('profiles-container');
+
+                // Loop through each user and create a profile card
+                data.results.forEach(user => {
+                    // Extract the necessary user data
+                    const userPicture = user.picture.large;
+                    const userName = `${user.name.first} ${user.name.last}`;
+                    const userEmail = user.email;
+                    const userGender = user.gender.charAt(0).toUpperCase() + user.gender.slice(1); // Capitalize gender
+                    const userCountry = user.location.country;
+
+                    // Create a new div for the profile card
+                    const profileCard = document.createElement('div');
+                    profileCard.classList.add('profile-card');
+
+                    // Add the user's picture, name, email, gender, and country to the card
+                    profileCard.innerHTML = `
+                        <img src="${userPicture}" alt="${userName}">
+                        <h3>${userName}</h3>
+                        <p>Email: ${userEmail}</p>
+                        <p>Gender: ${userGender}</p>
+                        <p>Country: ${userCountry}</p>
+                    `;
+
+                    // Append the profile card to the container
+                    profilesContainer.appendChild(profileCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    </script>
+
+</body>
+</html>
